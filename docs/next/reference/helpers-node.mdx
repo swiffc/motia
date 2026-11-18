@@ -71,7 +71,7 @@ worker.registerFunction(
 
 ### Types
 
-[`HttpAuthConfig`](#httpauthconfig) · [`HttpInvocationConfig`](#httpinvocationconfig) · [`HttpMethod`](#httpmethod) · [`HttpRequest`](#httprequest) · [`HttpResponse`](#httpresponse)
+[`HttpAuthConfig`](#httpauthconfig) · [`HttpMethod`](#httpmethod) · [`HttpRequest`](#httprequest) · [`HttpResponse`](#httpresponse)
 
 ### HttpAuthConfig
 
@@ -84,20 +84,6 @@ Authentication configuration for HTTP-invoked functions.
 ```typescript
 type HttpAuthConfig = { secret_key: string; type: "hmac" } | { token_key: string; type: "bearer" } | { header: string; type: "api_key"; value_key: string }
 ```
-
----
-
-### HttpInvocationConfig
-
-Configuration for an HTTP-invoked function (Lambda, Cloudflare Workers, etc.).
-
-| Name | Type | Required | Description |
-| --- | --- | --- | --- |
-| `auth` | [`HttpAuthConfig`](#httpauthconfig) | No | Authentication configuration. |
-| `headers` | `Record<string, string>` | No | Custom headers to send with the request. |
-| `method` | [`HttpMethod`](#httpmethod) | No | HTTP method. Defaults to `POST`. |
-| `timeout_ms` | `number` | No | Timeout in milliseconds. |
-| `url` | `string` | Yes | URL to invoke. |
 
 ---
 

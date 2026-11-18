@@ -89,7 +89,7 @@ register_function(id: impl Into<String>, registration: RegisterFunction) -> Func
       Set the function description.
     </ParamField>
     <ParamField body="http" type="fn(config: HttpInvocationConfig) -> Self" required>
-      Create a registration for an **HTTP-invoked** function (Lambda, Cloudflare Workers, etc.). No local handler runs.
+      **Deprecated.** HttpInvocationConfig is deprecated (iii-http-functions) and will be removed in an upcoming release. Behavior is unchanged for now. Migration guide: https://iii.dev/docs/upgrading/migrate-from-http-functions. Create a registration for an **HTTP-invoked** function (Lambda, Cloudflare Workers, etc.). No local handler runs.
     </ParamField>
     <ParamField body="local_dispatch" type="fn(enabled: bool) -> Self" required>
       Whether calls to this function from this same worker may run in-process once the engine allows it. Default `true`.
@@ -1222,7 +1222,7 @@ the function is observed is set with hooks: see `hooks`.
 | `args_format` | `fn() -> Self` | Yes | The JSON Schema of the observers' `args`, generated from `T`. The engine validates every `observe` against it (`INVALID_ARGS`) before the added hooks run, and they read the args with `Observer::args`. `#[serde(deny_unknown_fields)]` on `T` rejects argument typos. A function without it takes no args. |
 | `args_format_value` | `fn(schema: Value) -> Self` | Yes | `args_format` from a JSON Schema value. |
 | `description` | `fn(desc: impl Into<String>) -> Self` | Yes | Set the function description. |
-| `http` | `fn(config: HttpInvocationConfig) -> Self` | Yes | Create a registration for an **HTTP-invoked** function (Lambda, Cloudflare Workers, etc.). No local handler runs. |
+| `http` | `fn(config: HttpInvocationConfig) -> Self` | Yes | **Deprecated.** HttpInvocationConfig is deprecated (iii-http-functions) and will be removed in an upcoming release. Behavior is unchanged for now. Migration guide: https://iii.dev/docs/upgrading/migrate-from-http-functions. Create a registration for an **HTTP-invoked** function (Lambda, Cloudflare Workers, etc.). No local handler runs. |
 | `local_dispatch` | `fn(enabled: bool) -> Self` | Yes | Whether calls to this function from this same worker may run in-process once the engine allows it. Default `true`. |
 | `metadata` | `fn(meta: Value) -> Self` | Yes | Set function metadata. |
 | `new` | `fn(f: F) -> Self` | Yes | Create a registration for a **sync** typed function. |

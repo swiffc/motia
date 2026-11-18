@@ -95,6 +95,9 @@ Register a function with the engine.
 
 Pass a handler for local execution, or an ``HttpInvocationConfig``
 for HTTP-invoked functions (Lambda, Cloudflare Workers, etc.).
+Passing an ``HttpInvocationConfig`` emits a `FutureWarning`:
+HTTP-invoked functions are deprecated (iii-http-functions). Register a
+handler that makes the HTTP call instead.
 
 Handlers can be synchronous or asynchronous.  Sync handlers are
 automatically wrapped with ``run_in_executor`` so they do not
@@ -333,7 +336,10 @@ in its ``on_observation_deliver``.
 Returns synchronously, also before the connection is up; the observer
 is replayed with the same id on every reconnect. The handle holds its
 id until its ``dispose()`` is called or the engine disposes it; the
-id is free again at once after that. Errors
+id is free again at once after that. An observer without
+``max_fires`` or ``expires_in_ms`` that the engine disposed because
+this worker was away past its grace period (``OBSERVER_DISCONNECTED``)
+is not: it is observed again, with the same id, and goes ``pending``. Errors
 (``INVALID_ARGS``, ``INVALID_FILTER``, ``FORBIDDEN``,
 ``NOT_OBSERVABLE``, the rejection of the source's worker,
 ``UNSUPPORTED`` against an engine without observe) show up as state
@@ -1342,7 +1348,7 @@ may call the sync API.
 | `dispose` | `() -> None` | Yes | Removes the observer (``unobserve``). It is not replayed on reconnect. |
 | `dispose_async` | `async () -> None` | Yes | The async form of `dispose` (it does not wait for the engine). |
 | `id` | `Any` | No | The observer's id (stable across replays). |
-| `on_state_change` | `(listener: StateListener) -> Callable[[], None]` | Yes | Calls ``listener(state, reason)`` on every state change, in order, on the SDK's callback thread. Returns the unsubscribe function. |
+| `on_state_change` | `(listener: StateListener) -> Callable[[], None]` | Yes | Calls ``listener(state, reason)`` on every state change after it subscribes, in order, on the SDK's callback thread. Returns the unsubscribe function; a change still queued then is not delivered to it. |
 | `ready` | `(timeout: float \| None = None) -> None` | Yes | Blocks until the observer is ``active``. Use `ready_async` in async code. |
 | `ready_async` | `async () -> None` | Yes | Waits until the observer is ``active`` (on any event loop). |
 | `reason` | `ObserveReason \| None` | Yes | Why the observer is in its state (``error``, ``suspended``, ``disposed``). |

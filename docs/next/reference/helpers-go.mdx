@@ -144,7 +144,7 @@ fmt.Println(string(out))
 
 ### Types
 
-[`HandlerFunc`](#handlerfunc) · [`InternalRequest`](#internalrequest) · [`InvocationConfig`](#invocationconfig) · [`Method`](#method) · [`MultiValue`](#multivalue) · [`Request`](#request) · [`Response`](#response) · [`StreamRequest`](#streamrequest) · [`StreamResponse`](#streamresponse)
+[`HandlerFunc`](#handlerfunc) · [`InternalRequest`](#internalrequest) · [`Method`](#method) · [`MultiValue`](#multivalue) · [`Request`](#request) · [`Response`](#response) · [`StreamRequest`](#streamrequest) · [`StreamResponse`](#streamresponse)
 
 ### HandlerFunc
 
@@ -172,28 +172,6 @@ InternalRequest is the payload the http worker sends to the target of an http::o
 | `Method` | `string` | Yes | Method is the HTTP method of the request. |
 | `Response` | `iii.StreamChannelRef` | Yes | Response is the write end of the response channel. |
 | `RequestBody` | `iii.StreamChannelRef` | Yes | RequestBody is the read end of the request body channel. |
-
----
-
-### InvocationConfig
-
-InvocationConfig configures a function the engine invokes over HTTP (Lambda, Cloudflare Workers and similar), Node HttpInvocationConfig. It is the core `iii.HTTPInvocationRef`: URL, Method (POST when empty), TimeoutMs, Headers, and Auth, the JSON of a Node HttpAuthConfig: \{"type":"hmac","secret_key":...\}, \{"type":"bearer","token_key":...\} or \{"type":"api_key","header":...,"value_key":...\}.
-
-```go
-timeout := uint64(10_000)
-cfg := iiihttp.InvocationConfig{
-	URL:       "https://example.com/lambda/report",
-	Method:    iiihttp.MethodPost,
-	TimeoutMs: &timeout,
-	Auth:      json.RawMessage(`{"type":"hmac","secret_key":"REPORT_SECRET"}`),
-}
-out, _ := json.Marshal(cfg)
-fmt.Println(string(out))
-```
-
-```go
-type InvocationConfig = iii.HTTPInvocationRef
-```
 
 ---
 
